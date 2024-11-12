@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -11,11 +10,10 @@ function Register() {
     displayName: '',  
     phoneNumber: ''   
   });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { register } = useAuth();
 
+  const navigate = useNavigate();
+  const { signUp, loading, error:authError} = useAuth();
+  const [error, setError]=useState('');
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -33,7 +31,6 @@ function Register() {
 
     try {
       setError('');
-      setLoading(true);
       
       
       const additionalData = {
@@ -42,19 +39,17 @@ function Register() {
         updatedAt: new Date()
       };
 
-      await register(formData.email, formData.password, additionalData);
+      await signUp(formData.email, formData.password, additionalData);
       navigate('/');
     } catch (error) {
       setError('Failed to create an account: ' + error.message);
-    } finally {
-      setLoading(false);
-    }
+    } 
   }
 
   return (
     <div className="auth-container">
       <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
-      {error && <div className="error-message">{error}</div>}
+      {(error || authError) && (<div className="error-message">{error || authError}</div>)}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Email</label>

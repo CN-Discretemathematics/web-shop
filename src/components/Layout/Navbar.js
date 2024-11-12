@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 
 function Navbar() {
-  const { currentUser, logout } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <nav className="bg-white shadow-md">
@@ -15,11 +15,11 @@ function Navbar() {
             </Link>
           </div>
           <div className="flex items-center">
-            {currentUser ? (
+            {user ? (
               <>
-                <span className="px-4 py-2">{currentUser.email}</span>
+                <span className="px-4 py-2">{user.email}</span>
                 <button
-                  onClick={logout}
+                  onClick={signOut}
                   className="px-4 py-2 text-gray-600 hover:text-gray-800"
                 >
                   Logout

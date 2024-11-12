@@ -4,12 +4,10 @@ import Navbar from './components/Layout/Navbar';
 import Home from './components/Home';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
-import { AuthProvider } from './contexts/AuthContext';
 import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
       <Router>
         <div className="app">
           <Navbar />
@@ -22,7 +20,6 @@ function App() {
           </main>
         </div>
       </Router>
-    </AuthProvider>
   );
 }
 
