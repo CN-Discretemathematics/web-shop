@@ -13,6 +13,7 @@ function Navbar() {
             <Link to="/" className="text-xl font-bold text-gray-800">
               Shop App
             </Link>
+            <Link to="/admin/products">manage product</Link>
           </div>
           <div className="flex items-center">
             {user ? (
