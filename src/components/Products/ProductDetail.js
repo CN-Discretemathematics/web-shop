@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+import { addToCart } from '../../firebase/cart';
+import { auth } from '../../firebase/config';
+import toast from 'react-hot-toast';
 
 const ProductDetail = ({ onAddToCart }) => {
   const { id } = useParams();
@@ -10,6 +13,7 @@ const ProductDetail = ({ onAddToCart }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -33,6 +37,13 @@ const ProductDetail = ({ onAddToCart }) => {
     fetchProduct();
   }, [id]);
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
     if (value > 0 && value <= product.stock) {
@@ -40,8 +51,16 @@ const ProductDetail = ({ onAddToCart }) => {
     }
   };
 
-  const handleAddToCart = () => {
-    onAddToCart?.({ ...product, quantity });
+  const handleAddToCart = async () => {
+    if (!user) {
+      return navigate('/login',{ state: { from: `/product/${id}`}});
+    }
+    try{
+      await addToCart(user.uid, product.id, quantity);
+      toast.success('Added to cart');
+    } catch(error){
+      toast.error('Failed to add to cart');
+    }
   };
 
   if (loading) {
