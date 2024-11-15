@@ -2,13 +2,36 @@ import React, { useState } from 'react';
 import { useProducts } from '../../hooks/useProducts';
 import ProductCard from './ProductCard';
 import ProductSearch from './ProductSearch';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { addToCart } from '../../firebase/cart';
+import toast from 'react-hot-toast';
 
-const ProductList = ({ onAddToCart }) => {
+
+const ProductList = () => {
+  const navigate = useNavigate();
+  const {user} = useAuth();
   const { products, loading, error } = useProducts();
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
 
   const displayProducts = isFiltering ? filteredProducts : products;
+
+  const handleAddToCart = async (product) => {
+    if (!user){
+      return navigate('/login',{
+        state:{from:'/products'}
+      });
+    }
+
+    try{
+      await addToCart(user.uid, product.id, 1);
+      toast.success(`${product.name} added to cart`);
+    }catch(error){
+      toast.error('Failed to add to cart');
+      console.error('Error: ',error);
+    }
+  };
 
   const handleSearch = (results) => {
     setFilteredProducts(results);
@@ -50,7 +73,7 @@ const ProductList = ({ onAddToCart }) => {
             <ProductCard
               key={product.id}
               product={product}
-              onAddToCart={onAddToCart}
+              onAddToCart={() => handleAddToCart(product)}
             />
           ))}
         </div>
