@@ -47,7 +47,7 @@ export const useAuth = () => {
     return userRef;
   };
 
-  // 监听用户认证状态
+  // listen user status
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -81,7 +81,7 @@ export const useAuth = () => {
     }
   };
 
-  // 登录
+  // sign in
   const signIn = async (email, password) => {
     try {
       setError(null);
@@ -98,7 +98,7 @@ export const useAuth = () => {
     }
   };
 
-  // 登出
+  // sign out
   const signOut = async () => {
     try {
       setError(null);
@@ -110,7 +110,7 @@ export const useAuth = () => {
     }
   };
 
-  // 重置密码
+  // resetpassword
   const resetPassword = async (email) => {
     try {
       setError(null);
@@ -121,7 +121,7 @@ export const useAuth = () => {
     }
   };
 
-  // 更新用户信息
+  // update information
   const updateUserProfile = async (displayName, photoURL) => {
     try {
       setError(null);
@@ -130,7 +130,7 @@ export const useAuth = () => {
           displayName: displayName || user.displayName,
           photoURL: photoURL || user.photoURL
         });
-        // 强制刷新用户对象以获取最新信息
+        // force refresh
         setUser({ ...user });
       }
     } catch (err) {
