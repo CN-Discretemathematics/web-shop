@@ -11,6 +11,7 @@ import AdminProductForm from './components/Products/AdminProductForm';
 import ProductManagement from './components/Admin/ProductManagement';
 import Cart from './components/Cart/Cart';
 import CheckoutForm from './components/Cart/CheckoutForm';
+import ResetPassword from './components/Auth/ResetPassword'
 import './App.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/products" element={<ProductList />} />
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/admin/products" element={<ProductManagement />} />
